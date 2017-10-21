@@ -71,5 +71,5 @@ function doLoad(url, title){
 }
 
 function getActualURL(){
-	return document.location.pathname === '/' ? '/page/continent/south-america' : document.location.pathname;
+	return document.location.pathname === '/jquery/' ? '/jquery/page/continent/south-america' : document.location.pathname;
 }
