@@ -1,0 +1,10 @@
+version: '2'
+services:
+  server:
+    image: golang:1.9.1
+    working_dir: /go/src
+    volumes:
+     - $PWD:/go/src
+    command: go run server.go
+    ports:
+      - 3030:3030
