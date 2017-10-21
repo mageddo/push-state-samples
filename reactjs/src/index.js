@@ -138,7 +138,7 @@ class App extends React.Component {
 }
 
 class ArticlePage extends React.Component {
-	
+
 	constructor(props){
 		super()
 		this.props = props;
@@ -166,7 +166,7 @@ class ArticlePage extends React.Component {
 	}
 	render() {
 		return (
-		 <p>{this.state.content}</p>
+		 <div className="content" dangerouslySetInnerHTML={{__html: this.state.content}} ></div>
 		);
 	}
 }
