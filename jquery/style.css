@@ -1,0 +1,13 @@
+#content{
+	border: 1px solid #CCC;
+	padding: 10px;
+	background: #f9f9f9;
+	color: #303030;
+	font-family: Helvetica Neue, sans-serif;
+	line-height: 150%;
+	text-align: justify;
+}
+
+#content, iframe {
+	min-height: 280px;
+}
