@@ -7,7 +7,12 @@ import (
 
 func main(){
 
-	http.Handle("/data/", http.StripPrefix("/data", http.FileServer(http.Dir("./data"))))
+	http.Handle("/data/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("m=/data")
+		w.Header().Set("Access-Control-Allow-Origin", "*") // allow all domains query me
+		http.StripPrefix("/data", http.FileServer(http.Dir("./data"))).ServeHTTP(w, r)
+	}))
+
 	http.Handle("/", http.FileServer(http.Dir("./")))
 
 	// mapping static files

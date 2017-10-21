@@ -60,12 +60,11 @@ class Router {
 		document.title = state.title;
 		Router.observers.forEach(o => {
 			console.debug('m=doLoad, status=call-observer, observer=%o', o)
-			o.setState({
-				pageLoad: {
-					page: Router.get(state.page),
-					title: state.title,
-					path: state.path
-				}
+			o.load({
+				_id: 'state.page',
+				page: Router.get(state.page),
+				title: state.title,
+				path: state.path
 			})
 		})
 
@@ -91,8 +90,6 @@ class Router {
 
 }
 
-
-
 /**
  * It's prepared to load pages without make a refresh, just provide the URL and the react element at the 'page' property to be renderized
  */ 
@@ -116,30 +113,60 @@ class App extends React.Component {
 		Router.register(this);
 	}
 
+	load(state){
+		console.debug('m=app.load, state=%o', state);
+		this.setState({page: state.page})
+	}
+
 	render(){
 		return (
 		<div className="container">
-			<Link page={<GoogleHomePage />} title="Google Home Page" href="/diagrams" page={<GoogleHomePage />} >
-				Go to Google.com
-			</Link>
+			<ul>
+				<li><Link href="/page/continent/africa" page={<ArticlePage id="africa" />} >Africa</Link></li>
+				<li><Link href="/page/continent/asia" page={<ArticlePage id="asia" />} >Asia</Link></li>
+				<li><Link href="/page/continent/europe" page={<ArticlePage id="europe" /> }>Europe</Link></li>
+				<li><Link href="/page/continent/north-america" page={<ArticlePage id="north-america" />} >North America</Link></li>
+				<li><Link href="/page/continent/oceania" page={<ArticlePage id="oceania" />}>Oceania</Link></li>
+				<li><Link href="/page/continent/south-america" page={<ArticlePage id="south-america" />}>South America</Link></li>
+			</ul>
 			<div style={{background: "#F2F2F2", minHeight: 100, marginTop: 20}}>
-				{this.state.pageLoad.page}
+				{this.state.page}
 			</div>
 		</div>
 		)
 	}
 }
 
-
-class GoogleHomePage extends React.Component {
+class ArticlePage extends React.Component {
 	
-	constructor(){
+	constructor(props){
 		super()
+		this.props = props;
+		this.state = {};
+		console.debug('m=article, props=%o', this.props);
 	}
-	
+
+	componentDidMount(){
+		console.debug('m=componentDidMount');
+		this.load(this.props.id);
+	}
+
+	componentWillReceiveProps(nextProps){
+		console.debug('m=componentWillReceiveProps');
+		this.load(nextProps.id);
+	}
+
+	load(id){
+		fetch(`http://localhost:3030/data/` + id)
+		.then(result=>result.text())
+		.then(content => {
+			console.debug('m=loadPage, status=done');
+			this.setState({content})
+		})
+	}
 	render() {
 		return (
-		 <p><input type="text" /><button>Google Search</button></p>
+		 <p>{this.state.content}</p>
 		);
 	}
 }
