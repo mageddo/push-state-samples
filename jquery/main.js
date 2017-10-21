@@ -41,11 +41,11 @@ $(function () {
 	 */
 	function load (url) {
 		console.debug('m=load, url=%s', url)
-		$.get('data/' + url).done(function (data) {
+		$.get('/data' + url).done(function (data) {
 				$("#content").html(data);
 		}).fail(function(res){
 			console.error('m=load, status=%d, err=%o', res.status, arguments);
-			wrapIframe($("#content").empty(), '<h2>Error at load page "/' + url + '"</h2>' + res.responseText);
+			wrapIframe($("#content").empty(), '<h2>Error at load page "' + url + '"</h2>' + res.responseText);
 		})
 	}
 
@@ -62,9 +62,11 @@ $(function () {
 		// so we need to set it using document
 		document.title = title;
 
+		url = url.substring(url.lastIndexOf('/'))
 		load(url);
 	}
 	
-	doLoad('south-america', 'South America');
+
+	doLoad('/page/continent/south-america', 'South America');
 	
 });
