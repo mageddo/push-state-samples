@@ -1,3 +1,7 @@
+.container {
+	max-width: 900px;
+	text-align: left;
+}
 #content{
 	border: 1px solid #CCC;
 	padding: 10px;
