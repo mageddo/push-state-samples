@@ -13,7 +13,7 @@ class Router {
 			var st = e.state;
 			console.debug('m=onpopstate, state=%o, e=%o', st, e)
 			if (st !== null) {
-					Router.doLoad(st);
+				Router.getAndLoad(st);
 			} else {
 				console.info('No state');
 				Router.doLoad({page: null, title: null, path: null});
@@ -37,19 +37,26 @@ class Router {
 	 */
 	static load(e, page){
 		e.preventDefault();
-		
-		var key = Router.hashCode();
-		Router.put(key, page);
-
 		var state = {
-			page: key,
+			page: page,
 			path: e.currentTarget.getAttribute('href'),
 			title: e.currentTarget.getAttribute('title')
 		};
-		window.history.pushState(state, state.title, state.path);
-		Router.doLoad(state)
+		Router.pushAndLoad(state);
 	}
 
+	static pushAndLoad(state){
+		var key = Router.hashCode();
+		Router.put(key, state.page);
+		var page = state.page;
+		window.history.pushState(Object.assign(state, {page: key}), state.title, state.path);
+		Router.doLoad(Object.assign(state, {page: page}));
+	}
+
+	static getAndLoad(state){
+		state.page = Router.get(state.page);
+		Router.doLoad(state)
+	}
 	/**
 	 * Call listeners with the passed state
 	 */
@@ -61,8 +68,7 @@ class Router {
 		Router.observers.forEach(o => {
 			console.debug('m=doLoad, status=call-observer, observer=%o', o)
 			o.load({
-				_id: 'state.page',
-				page: Router.get(state.page),
+				page: state.page,
 				title: state.title,
 				path: state.path
 			})
@@ -109,13 +115,31 @@ class App extends React.Component {
 
 	constructor(){
 		super();
-		this.state = {pageLoad: {page: 'Hi'}}
+		this.state = {}
 		Router.register(this);
 	}
 
 	load(state){
 		console.debug('m=app.load, state=%o', state);
 		this.setState({page: state.page})
+	}
+
+	componentDidMount(){
+		if (window.document.location.pathname === '/'){
+			Router.pushAndLoad({
+				page: <ArticlePage id="south-america" />,
+				title: "South America",
+				path: "/page/continent/south-america"
+			});
+		} else{
+			var path = document.location.pathname;
+			var id = path.substring(path.lastIndexOf('/') + 1)
+			Router.pushAndLoad({
+				page: <ArticlePage id={id} />,
+				title: "South America",
+				path: path
+			});
+		}
 	}
 
 	render(){
