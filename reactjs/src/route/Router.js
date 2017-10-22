@@ -62,7 +62,7 @@ export default class Router {
 
 		// currently browsers does not consider the pushState title property
 		// so we need to set it using document
-		document.title = state.title;
+		window.document.title = state.title;
 		Router.observers.forEach(o => {
 			console.debug('m=doLoad, status=call-observer, observer=%o', o)
 			o.load({
@@ -105,6 +105,6 @@ export class Link extends React.Component {
 	}
 
 	render(){
-		return <a data-title={this.props.title} className="load-link" onClick={(e) => Router.load(e, this.props.page)} {...this.props}>{this.props.children}</a>
+		return <a className="load-link" onClick={(e) => Router.load(e, this.props.page)} {...this.props}>{this.props.children}</a>
 	}
 }
