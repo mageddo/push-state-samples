@@ -76,7 +76,7 @@ class ArticlePage extends React.Component {
 	}
 
 	load(id){
-		fetch(`http://localhost:3030/data/` + id)
+		fetch(`/data/` + id)
 		.then(result=>result.text())
 		.then(content => {
 			console.debug('m=loadPage, status=done');
