@@ -8,45 +8,40 @@ class App extends React.Component {
 	constructor(){
 		super();
 		this.state = {}
-		Router.register(this);
+		Router.register(this, {
+			'ArticlePage': (data) => {
+				console.debug('m=ArticlePage, state=%o', this);
+				this.setState({page: <ArticlePage id={data.id} />})
+			}
+		});
 	}
 
-	load(state){
-		console.debug('m=app.load, state=%o', state);
-		this.setState({page: state.page})
+	/**
+	 * Router try to invoke the right handler then call this method to reponse a feedback
+	 */ 
+	load(state, loaded){
+		console.debug('m=App.load, state=%o, loaded=%s', state, loaded);
 	}
 
 	componentDidMount(){
-
-		var state = {};
-		if (window.document.location.pathname === '/'){
-			state = {
-				page: <ArticlePage id="south-america" />,
-				title: "South America",
-				path: "/page/continent/south-america"
-			};
-		} else{
-			var path = document.location.pathname;
-			var id = path.substring(path.lastIndexOf('/') + 1)
-			state = {
-				page: <ArticlePage id={id} />,
-				title: "South America",
-				path: path
-			};
-		}
-		Router.pushAndLoad(state);
+		Router.start({
+			page: 'ArticlePage',
+			data: {id: 'south-america'},
+			title: "South America",
+			path: "/page/continent/south-america"
+		});
 	}
 
 	render(){
 		return (
 		<div className="container">
 			<ul>
-				<li><Link title="Africa" href="/page/continent/africa" page={<ArticlePage id="africa" />} >Africa</Link></li>
-				<li><Link title="Asia" href="/page/continent/asia" page={<ArticlePage id="asia" />} >Asia</Link></li>
-				<li><Link title="Europe" href="/page/continent/europe" page={<ArticlePage id="europe" /> }>Europe</Link></li>
-				<li><Link title="North America" href="/page/continent/north-america" page={<ArticlePage id="north-america" />} >North America</Link></li>
-				<li><Link title="Oceania" href="/page/continent/oceania" page={<ArticlePage id="oceania" />}>Oceania</Link></li>
-				<li><Link title="South America" href="/page/continent/south-america" page={<ArticlePage id="south-america" />}>South America</Link></li>
+				<li><Link title="Africa" href="/page/continent/africa" page="ArticlePage" data={{id: "africa"}} >Africa</Link></li>
+				<li><Link title="Asia" href="/page/continent/asia" page="ArticlePage" data={{id: "asia"}} >Asia</Link></li>
+				<li><Link title="Europe" href="/page/continent/europe" page="ArticlePage" data={{id: "europe"}} >Europe</Link></li>
+				<li><Link title="North America" href="/page/continent/north-america" data={{id: "north-america"}} >North America</Link></li>
+				<li><Link title="Oceania" href="/page/continent/oceania" page="ArticlePage" data={{id: "oceania"}} >Oceania</Link></li>
+				<li><Link title="South America" href="/page/continent/south-america" page="ArticlePage" data={{id: "south-america"}} >South America</Link></li>
 			</ul>
 			<div style={{background: "#F2F2F2", minHeight: 100, marginTop: 20}}>
 				{this.state.page}
