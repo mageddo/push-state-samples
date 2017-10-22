@@ -40,20 +40,19 @@ export default class Router {
 			path: e.currentTarget.getAttribute('href'),
 			title: e.currentTarget.getAttribute('title')
 		};
+		console.debug('m=load, e=%o, page=%o', page);
 		Router.pushAndLoad(state);
 	}
 
 	static pushAndLoad(state){
 		var key = Router.hashCode();
 		Router.put(key, state.page);
-		var page = state.page;
-		window.history.pushState(Object.assign(state, {page: key}), state.title, state.path);
-		Router.doLoad(Object.assign(state, {page: page}));
+		window.history.pushState(Object.assign({}, state, {page: key}), state.title, state.path);
+		Router.doLoad(state);
 	}
 
 	static getAndLoad(state){
-		state.page = Router.get(state.page);
-		Router.doLoad(state)
+		Router.doLoad(Object.assign({}, state, {page: Router.get(state.page)}))
 	}
 	/**
 	 * Call listeners with the passed state
