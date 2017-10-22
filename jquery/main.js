@@ -45,6 +45,7 @@ function wrapIframe(parent, html){
  */
 function load (url) {
 	console.debug('m=load, url=%s', url)
+	url = url.substring(url.lastIndexOf('/'))
 	$.get('/data' + url).done(function (data) {
 			$("#content").html(data);
 	}).fail(function(res){
@@ -66,7 +67,6 @@ function doLoad(url, title){
 	// so we need to set it using document
 	document.title = title;
 
-	url = url.substring(url.lastIndexOf('/'))
 	load(url);
 }
 
