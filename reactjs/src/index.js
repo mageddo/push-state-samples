@@ -9,9 +9,9 @@ class App extends React.Component {
 		super();
 		this.state = {}
 		Router.register(this, {
-			'ArticlePage': (data) => {
+			'^/page/continent/([\\w-]+)': (data) => {
 				console.debug('m=ArticlePage, state=%o', this);
-				this.setState({page: <ArticlePage id={data.id} />})
+				this.setState({page: <ArticlePage id={data.pathVar[0]} />})
 			}
 		});
 	}
@@ -36,12 +36,12 @@ class App extends React.Component {
 		return (
 		<div className="container">
 			<ul>
-				<li><Link title="Africa" href="/page/continent/africa" page="ArticlePage" data={{id: "africa"}} >Africa</Link></li>
-				<li><Link title="Asia" href="/page/continent/asia" page="ArticlePage" data={{id: "asia"}} >Asia</Link></li>
-				<li><Link title="Europe" href="/page/continent/europe" page="ArticlePage" data={{id: "europe"}} >Europe</Link></li>
-				<li><Link title="North America" href="/page/continent/north-america" page="ArticlePage" data={{id: "north-america"}} >North America</Link></li>
-				<li><Link title="Oceania" href="/page/continent/oceania" page="ArticlePage" data={{id: "oceania"}} >Oceania</Link></li>
-				<li><Link title="South America" href="/page/continent/south-america" page="ArticlePage" data={{id: "south-america"}} >South America</Link></li>
+				<li><Link title="Africa" href="/page/continent/africa" data={{id: "africa"}} >Africa</Link></li>
+				<li><Link title="Asia" href="/page/continent/asia" data={{id: "asia"}} >Asia</Link></li>
+				<li><Link title="Europe" href="/page/continent/europe" data={{id: "europe"}} >Europe</Link></li>
+				<li><Link title="North America" href="/page/continent/north-america" data={{id: "north-america"}} >North America</Link></li>
+				<li><Link title="Oceania" href="/page/continent/oceania" data={{id: "oceania"}} >Oceania</Link></li>
+				<li><Link title="South America" href="/page/continent/south-america" data={{id: "south-america"}} >South America</Link></li>
 			</ul>
 			<div style={{background: "#F2F2F2", minHeight: 100, marginTop: 20}}>
 				{this.state.page}

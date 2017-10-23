@@ -10,12 +10,7 @@ export default class Router {
 		window.onpopstate = function(e){
 			var st = e.state;
 			console.debug('m=onpopstate, state=%o, e=%o', st, e)
-			if (st !== null) {
-				Router.getAndLoad(st);
-			} else {
-				console.info('No state');
-				Router.doLoad({page: null, title: null, path: null});
-			}
+			Router.getAndLoad();
 		}
 	})()
 
@@ -33,15 +28,13 @@ export default class Router {
 	 * e - the click event
 	 * page - react element to be rendered
 	 */
-	static load(e, page, data){
+	static load(e){
 		e.preventDefault();
 		var state = {
-			page: page,
-			data: data,
 			path: e.currentTarget.getAttribute('href'),
 			title: e.currentTarget.getAttribute('title')
 		};
-		console.debug('m=load, e=%o, page=%o', page);
+		console.debug('m=load, e=%o, state=%o', state);
 		Router.pushAndLoad(state);
 	}
 
@@ -50,22 +43,22 @@ export default class Router {
 		Router.doLoad(state);
 	}
 
-	static getAndLoad(state){
-		Router.doLoad(state)
+	static getAndLoad(){
+		Router.doLoad()
 	}
 	/**
 	 * Call listeners with the passed state
 	 */
-	static doLoad(state){
+	static doLoad(){
 
 		// currently browsers does not consider the pushState title property
 		// so we need to set it using document
 		// window.document.title = state.title;
 		Router.observers.forEach(o => {
 			console.debug('m=doLoad, status=call-observer, observer=%o', o)
-			var called = Router.invoke(state, o.map);
+			var data = Router.invoke(o.map);
 			if(o.observer.load !== undefined){
-				o.observer.load(state, called);
+				o.observer.load(data, data);
 			}
 		})
 	}
@@ -73,47 +66,30 @@ export default class Router {
 	/**
 	 * Call the respective function in map if it exists
 	 * The callback will have the state in this variable and the data as parameter
-	 * retuns true if found a handler and false if don't
+	 * retuns data if found a handler and null if don't
 	 */
-	static invoke(state, map){
-		if(map[state.page]){
-			console.debug('m=invoke, status=invoking');
-			map[state.page].call(state, state.data);
-			return true;
-		}else{
-			console.debug('m=invoke, status=not-found');
-			return false;
+	static invoke(map){
+		var keys = Object.keys(map);
+		for(var i=0; i < keys.length; i++){
+			var key = keys[i], pathVar, path = document.location.pathname;
+			if((pathVar = new RegExp(key).exec(path)) != null){
+				console.debug('m=invoke, status=invoking, path=%s, key=%s, data=%o', path, key, JSON.stringify(pathVar));
+				var data = {pathVar: pathVar.splice(1), query: new URLSearchParams(window.location.search)};
+				map[key].call(data, data);
+				return data;
+			}
 		}
+		console.debug('m=invoke, status=not-found');
+		return null;
 	}
 
 	/**
 	 * Must be called just after page load to load the the current state of the passed if it does not exists
 	 */
-	static start(state){
-		if(window.history.state !== null){
-			Router.doLoad(window.history.state);
-		}else {
-			Router.doLoad(state);
-		}
+	static start(){
+		Router.getAndLoad();
 	}
 
-	/**
-	 * Geneate a random hashCode
-	 */
-	static hashCode = function(){
-		return Math.random().toString(16).substring(2);
-	}
-
-	/**
-	 * put value at the singleton map
-	 */
-	static put(key, value){
-		Router.map[key] = value;
-	}
-
-	static get(key){
-		return Router.map[key];
-	}
 
 }
 
