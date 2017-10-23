@@ -4,6 +4,44 @@
 
 Access http://localhost:3000
 
+#### State callback
+
+```javascript
+Router.register(this, {
+	'/': (state) => {
+
+	},
+	'404': (state) => {
+		console.debug('called when match was not found');
+	}
+});
+```
+
+#### State contract 
+
+```javascript
+{
+	title: '', // page  title
+	path: '', // push state path
+	page: null, // page to be render when pushstate is false in Link tag
+	pathVar: [1, 'b'], // group values in path 
+	query:  URLSearchParams // query string object
+}
+```
+
+#### Link
+
+If you just want to transitate from a page to another without use pushstate
+
+```html
+<Link pushstate="false" page={<p>what you want to render?</p>} href="/some/path" >Some link</Link>
+```
+
+Using pushstate
+```html
+<Link href="/some/path" >Some link</Link>
+```
+
 
 #### Creating a page that loads the post information and have a permanent link to be acessed anywhere
 
