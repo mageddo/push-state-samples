@@ -40,10 +40,10 @@ class App extends React.Component {
 	}
 
 	/**
-	 * Router try to invoke the right handler then call this method to reponse a feedback
+	 * This method will be called when a Link without pushState was clicked, then you will receive in state.page a page to render
 	 */ 
 	load(state){
-		console.debug('m=App.load, state=%o, loaded=%s', state);
+		console.debug('m=App.load, state=%o', state);
 		this.setState({page: state.page});
 	}
 
@@ -54,7 +54,6 @@ class App extends React.Component {
 	render(){
 		return (
 		<div className="container">
-			Continents
 			<ul className="menu">
 				<li><Link title="Home" href="/" >Home</Link></li>
 				<li><Link title="Posts" href="/page/posts/" >Posts</Link></li>
