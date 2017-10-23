@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router, {Link} from "./route/Router.js"
+import Locator from "./Locator.js"
 import "./index.css"
+
+import PostList from "./page/Post.js"
+import UserList from "./page/User.js"
+
+
+window.Locator = Locator;
 
 class App extends React.Component {
 
@@ -16,6 +23,15 @@ class App extends React.Component {
 			'^/$': (data) => {
 				console.debug('m=Home, state=%o', this);
 				this.setState({page: <ArticlePage id="south-america" />})
+			},
+			'^/posts' : (state) => {
+				this.setState({page: <PostList />});
+			},
+			'^/users' : (state) => {
+				this.setState({page: <UserList />});
+			},
+			'404' : (state) => {
+				this.setState({page: 'Not Found'});
 			}
 		});
 	}
@@ -23,8 +39,9 @@ class App extends React.Component {
 	/**
 	 * Router try to invoke the right handler then call this method to reponse a feedback
 	 */ 
-	load(state, loaded){
-		console.debug('m=App.load, state=%o, loaded=%s', state, loaded);
+	load(state){
+		console.debug('m=App.load, state=%o, loaded=%s', state);
+		this.setState({page: state.page});
 	}
 
 	componentDidMount(){
@@ -34,8 +51,11 @@ class App extends React.Component {
 	render(){
 		return (
 		<div className="container">
-			<ul>
+			Continents
+			<ul className="menu">
 				<li><Link title="Home" href="/" >Home</Link></li>
+				<li><Link title="Posts" href="/posts/" >Posts</Link></li>
+				<li><Link title="Users" href="/users/" >Users</Link></li>
 				<li><Link title="Africa" href="/page/continent/africa" >Africa</Link></li>
 				<li><Link title="Asia" href="/page/continent/asia" >Asia</Link></li>
 				<li><Link title="Europe" href="/page/continent/europe" >Europe</Link></li>

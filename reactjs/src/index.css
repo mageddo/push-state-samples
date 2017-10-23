@@ -20,3 +20,8 @@ body {
 .content, iframe {
 	min-height: 280px;
 }
+
+.menu li {
+	display: inline-block;
+	margin: 5px 10px;
+}
