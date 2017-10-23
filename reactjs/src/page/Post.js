@@ -6,14 +6,14 @@ export default class PostList extends Component {
 	constructor(){
 		super();
 		this.state = {items:[]}
-		console.debug('articles=constructor');
+		console.debug('postList=constructor');
 	}
 
 	componentDidMount(){
 		fetch(window.Locator.JSON_PLACE_HOLDER.solve(`/posts`))
 		.then(result => result.json())
 		.then(items => this.setState({items: items}))
-		console.debug('articles=componentDidMount');
+		console.debug('postList=componentDidMount');
 	}
 
 	render(){
@@ -32,22 +32,23 @@ export class Post extends Component {
 
 	constructor(props){
 		super();
-		this.state = {article: {}}
-		console.debug('article=constructor');
+		this.props = props;
+		this.state = {post: {}};
+		console.debug('post=constructor, props=%o', props);
 	}
 
 	componentDidMount(){
-		fetch(window.Locator.JSON_REPLACE_HOLDER.solve(`/posts/` + this.props.id))
+		fetch(window.Locator.JSON_PLACE_HOLDER.solve(`/posts/` + this.props.id))
 		.then(result => result.json())
-		.then(items => this.setState({article: items}))
-		console.debug('article=componentDidMount');
+		.then(item => this.setState({post: item}))
+		console.debug('post=componentDidMount, id=%o', this.props.id);
 	}
 
 	render(){
 		return (
 			<div>
-				<h1>{this.state.article.title}</h1>
-				<p>{this.state.article.body}</p>
+				<h1>{this.state.post.title}</h1>
+				<p>{this.state.post.body}</p>
 			</div>
 		)
 	}

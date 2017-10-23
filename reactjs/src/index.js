@@ -4,7 +4,7 @@ import Router, {Link} from "./route/Router.js"
 import Locator from "./Locator.js"
 import "./index.css"
 
-import PostList from "./page/Post.js"
+import PostList, {Post} from "./page/Post.js"
 import UserList from "./page/User.js"
 
 
@@ -24,10 +24,13 @@ class App extends React.Component {
 				console.debug('m=Home, state=%o', this);
 				this.setState({page: <ArticlePage id="south-america" />})
 			},
-			'^/posts' : (state) => {
+			'^/page/posts/*$' : (state) => {
 				this.setState({page: <PostList />});
 			},
-			'^/users' : (state) => {
+			'^/page/posts/(\\d+)' : (state) => {
+				this.setState({page: <Post id={state.pathVar[0]} />});
+			},
+			'^/page/users' : (state) => {
 				this.setState({page: <UserList />});
 			},
 			'404' : (state) => {
@@ -54,8 +57,8 @@ class App extends React.Component {
 			Continents
 			<ul className="menu">
 				<li><Link title="Home" href="/" >Home</Link></li>
-				<li><Link title="Posts" href="/posts/" >Posts</Link></li>
-				<li><Link title="Users" href="/users/" >Users</Link></li>
+				<li><Link title="Posts" href="/page/posts/" >Posts</Link></li>
+				<li><Link title="Users" href="/page/users/" >Users</Link></li>
 				<li><Link title="Africa" href="/page/continent/africa" >Africa</Link></li>
 				<li><Link title="Asia" href="/page/continent/asia" >Asia</Link></li>
 				<li><Link title="Europe" href="/page/continent/europe" >Europe</Link></li>
