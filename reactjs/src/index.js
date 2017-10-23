@@ -12,6 +12,10 @@ class App extends React.Component {
 			'^/page/continent/([\\w-]+)': (data) => {
 				console.debug('m=ArticlePage, state=%o', this);
 				this.setState({page: <ArticlePage id={data.pathVar[0]} />})
+			},
+			'^/$': (data) => {
+				console.debug('m=Home, state=%o', this);
+				this.setState({page: <ArticlePage id="south-america" />})
 			}
 		});
 	}
@@ -24,24 +28,20 @@ class App extends React.Component {
 	}
 
 	componentDidMount(){
-		Router.start({
-			page: 'ArticlePage',
-			data: {id: 'south-america'},
-			title: "South America",
-			path: "/page/continent/south-america"
-		});
+		Router.start();
 	}
 
 	render(){
 		return (
 		<div className="container">
 			<ul>
-				<li><Link title="Africa" href="/page/continent/africa" data={{id: "africa"}} >Africa</Link></li>
-				<li><Link title="Asia" href="/page/continent/asia" data={{id: "asia"}} >Asia</Link></li>
-				<li><Link title="Europe" href="/page/continent/europe" data={{id: "europe"}} >Europe</Link></li>
-				<li><Link title="North America" href="/page/continent/north-america" data={{id: "north-america"}} >North America</Link></li>
-				<li><Link title="Oceania" href="/page/continent/oceania" data={{id: "oceania"}} >Oceania</Link></li>
-				<li><Link title="South America" href="/page/continent/south-america" data={{id: "south-america"}} >South America</Link></li>
+				<li><Link title="Home" href="/" >Home</Link></li>
+				<li><Link title="Africa" href="/page/continent/africa" >Africa</Link></li>
+				<li><Link title="Asia" href="/page/continent/asia" >Asia</Link></li>
+				<li><Link title="Europe" href="/page/continent/europe" >Europe</Link></li>
+				<li><Link title="North America" href="/page/continent/north-america" >North America</Link></li>
+				<li><Link title="Oceania" href="/page/continent/oceania" >Oceania</Link></li>
+				<li><Link title="South America" href="/page/continent/south-america" >South America</Link></li>
 			</ul>
 			<div style={{background: "#F2F2F2", minHeight: 100, marginTop: 20}}>
 				{this.state.page}
